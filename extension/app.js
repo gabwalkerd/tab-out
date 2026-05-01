@@ -389,14 +389,14 @@ function playCloseSound() {
  */
 function shootConfetti(x, y) {
   const colors = [
-    '#c8713a', // amber
-    '#e8a070', // amber light
-    '#5a7a62', // sage
-    '#8aaa92', // sage light
-    '#5a6b7a', // slate
-    '#8a9baa', // slate light
-    '#d4b896', // warm paper
-    '#b35a5a', // rose
+    '#d29922', // amber
+    '#e3b341', // amber light
+    '#3fb950', // green
+    '#56d364', // green light
+    '#58a6ff', // blue
+    '#79c0ff', // blue light
+    '#8b949e', // muted
+    '#f85149', // rose
   ];
 
   const particleCount = 17;
@@ -916,7 +916,7 @@ function renderDomainCard(group) {
   if (hasDupes) {
     const dupeUrlsEncoded = dupeUrls.map(([url]) => encodeURIComponent(url)).join(',');
     actionsHtml += `
-      <button class="action-btn" data-action="dedup-keep-one" data-dupe-urls="${dupeUrlsEncoded}">
+      <button class="action-btn close-tabs" data-action="dedup-keep-one" data-dupe-urls="${dupeUrlsEncoded}">
         Close ${totalExtras} duplicate${totalExtras !== 1 ? 's' : ''}
       </button>`;
   }

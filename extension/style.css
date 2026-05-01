@@ -3,19 +3,19 @@
    ============================================================ */
 
 :root {
-  --ink: #e8e5e0;
-  --paper: #1a1918;
-  --warm-gray: #3a3734;
-  --muted: #8a8580;
-  --accent-amber: #d4894e;
-  --accent-sage: #6a9a72;
-  --accent-slate: #7a8b9a;
-  --accent-rose: #c36a6a;
-  --status-active: #4d9a5a;
-  --status-cooling: #c8993e;
-  --status-abandoned: #c36a6a;
-  --card-bg: #242220;
-  --shadow: rgba(0, 0, 0, 0.3);
+  --ink: #e6edf3;
+  --paper: #0d1117;
+  --warm-gray: #30363d;
+  --muted: #8b949e;
+  --accent-amber: #d29922;
+  --accent-sage: #3fb950;
+  --accent-slate: #58a6ff;
+  --accent-rose: #f85149;
+  --status-active: #3fb950;
+  --status-cooling: #d29922;
+  --status-abandoned: #f85149;
+  --card-bg: #161b22;
+  --shadow: rgba(0, 0, 0, 0.4);
 }
 
 /* Light theme override */
@@ -96,8 +96,8 @@ header {
 
 /* ---- Tab cleanup banner ---- */
 .tab-cleanup-banner {
-  background: linear-gradient(135deg, rgba(212, 137, 78, 0.06), rgba(212, 137, 78, 0.12));
-  border: 1px solid rgba(212, 137, 78, 0.22);
+  background: linear-gradient(135deg, rgba(210, 153, 34, 0.06), rgba(210, 153, 34, 0.12));
+  border: 1px solid rgba(210, 153, 34, 0.22);
   border-radius: 8px;
   padding: 16px 24px;
   display: flex;
@@ -116,7 +116,7 @@ header {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(212, 137, 78, 0.12);
+  background: rgba(210, 153, 34, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -274,22 +274,22 @@ header {
 
 .mission-tag.active {
   color: var(--status-active);
-  background: rgba(77, 154, 90, 0.1);
+  background: rgba(63, 185, 80, 0.1);
 }
 
 .mission-tag.cooling {
   color: var(--status-cooling);
-  background: rgba(200, 153, 62, 0.1);
+  background: rgba(210, 153, 34, 0.1);
 }
 
 .mission-tag.abandoned {
   color: var(--status-abandoned);
-  background: rgba(195, 106, 106, 0.1);
+  background: rgba(248, 81, 73, 0.1);
 }
 
 .mission-tag.neutral {
   color: var(--muted);
-  background: rgba(138, 133, 128, 0.1);
+  background: rgba(139, 148, 158, 0.1);
 }
 
 .open-tabs-badge {
@@ -299,7 +299,7 @@ header {
   font-size: 10px;
   font-weight: 500;
   color: var(--accent-amber);
-  background: rgba(212, 137, 78, 0.1);
+  background: rgba(210, 153, 34, 0.1);
   padding: 2px 8px;
   border-radius: 3px;
 }
@@ -330,7 +330,7 @@ header {
   padding: 8px 4px;
   border-radius: 0;
   border: none;
-  border-bottom: 1px solid rgba(138, 133, 128, 0.1);
+  border-bottom: 1px solid rgba(139, 148, 158, 0.1);
   position: relative;
   display: flex;
   align-items: center;
@@ -365,7 +365,7 @@ header {
 }
 
 .chip-has-dupes {
-  border-color: rgba(212, 137, 78, 0.25);
+  border-color: rgba(210, 153, 34, 0.25);
 }
 
 .chip-actions {
@@ -399,17 +399,17 @@ header {
 
 .chip-action:hover {
   opacity: 1;
-  background: rgba(138, 133, 128, 0.12);
+  background: rgba(139, 148, 158, 0.12);
 }
 
 .chip-save:hover {
   color: var(--accent-sage);
-  background: rgba(106, 154, 114, 0.1);
+  background: rgba(63, 185, 80, 0.1);
 }
 
 .chip-close:hover {
   color: var(--status-abandoned);
-  background: rgba(195, 106, 106, 0.1);
+  background: rgba(248, 81, 73, 0.1);
 }
 
 .page-chip.clickable {
@@ -418,7 +418,7 @@ header {
 }
 
 .page-chip.clickable:hover {
-  background: rgba(212, 137, 78, 0.05);
+  background: rgba(210, 153, 34, 0.05);
 }
 
 .page-chip-overflow {
@@ -492,24 +492,24 @@ header {
 }
 
 .action-btn.close-tabs {
-  border-color: rgba(212, 137, 78, 0.35);
+  border-color: rgba(210, 153, 34, 0.35);
   color: var(--accent-amber);
-  background: rgba(212, 137, 78, 0.04);
+  background: rgba(210, 153, 34, 0.04);
 }
 
 .action-btn.close-tabs:hover {
-  background: rgba(212, 137, 78, 0.12);
+  background: rgba(210, 153, 34, 0.12);
   border-color: var(--accent-amber);
 }
 
 .action-btn.save-tabs {
-  border-color: rgba(106, 154, 114, 0.35);
+  border-color: rgba(63, 185, 80, 0.35);
   color: var(--accent-sage);
-  background: rgba(106, 154, 114, 0.04);
+  background: rgba(63, 185, 80, 0.04);
 }
 
 .action-btn.save-tabs:hover {
-  background: rgba(106, 154, 114, 0.12);
+  background: rgba(63, 185, 80, 0.12);
   border-color: var(--accent-sage);
 }
 
@@ -653,10 +653,10 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: rgba(106, 154, 114, 0.12);
-  border: 1.5px solid rgba(106, 154, 114, 0.3);
-  box-shadow: 0 0 0 8px rgba(106, 154, 114, 0.06),
-              0 0 0 16px rgba(106, 154, 114, 0.03);
+  background: rgba(63, 185, 80, 0.12);
+  border: 1.5px solid rgba(63, 185, 80, 0.3);
+  box-shadow: 0 0 0 8px rgba(63, 185, 80, 0.06),
+              0 0 0 16px rgba(63, 185, 80, 0.03);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -708,7 +708,7 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
 .theme-toggle:hover {
   color: var(--ink);
   border-color: var(--ink);
-  background: rgba(138, 133, 128, 0.08);
+  background: rgba(139, 148, 158, 0.08);
 }
 
 .theme-toggle svg {
@@ -762,7 +762,7 @@ body[data-theme="light"] .theme-toggle .icon-moon { display: none; }
   align-items: flex-start;
   gap: 10px;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(138, 133, 128, 0.12);
+  border-bottom: 1px solid rgba(139, 148, 158, 0.12);
   animation: fadeUp 0.3s ease both;
 }
 
@@ -953,7 +953,7 @@ body[data-theme="light"] .theme-toggle .icon-moon { display: none; }
   align-items: center;
   gap: 8px;
   padding: 6px 0;
-  border-bottom: 1px solid rgba(138, 133, 128, 0.08);
+  border-bottom: 1px solid rgba(139, 148, 158, 0.08);
 }
 
 .archive-item:last-child {
@@ -981,4 +981,62 @@ body[data-theme="light"] .theme-toggle .icon-moon { display: none; }
   color: var(--muted);
   opacity: 0.6;
   flex-shrink: 0;
+}
+
+/* ================================================================
+   DARK MODE — Green buttons (close/save actions)
+   Uses body:not([data-theme="light"]) so light mode stays unchanged.
+   ================================================================ */
+
+body:not([data-theme="light"]) .action-btn.close-tabs {
+  border-color: rgba(63, 185, 80, 0.35);
+  color: #3fb950;
+  background: rgba(63, 185, 80, 0.06);
+}
+
+body:not([data-theme="light"]) .open-tabs-badge {
+  color: #3fb950;
+  background: rgba(63, 185, 80, 0.1);
+}
+
+body:not([data-theme="light"]) .action-btn.close-tabs:hover {
+  background: rgba(63, 185, 80, 0.15);
+  border-color: #3fb950;
+}
+
+body:not([data-theme="light"]) .chip-close:hover {
+  color: #3fb950;
+  background: rgba(63, 185, 80, 0.1);
+}
+
+body:not([data-theme="light"]) .tab-cleanup-btn {
+  background: #3fb950;
+}
+
+body:not([data-theme="light"]) .tab-cleanup-btn:hover {
+  background: #2ea043;
+}
+
+body:not([data-theme="light"]) .tab-cleanup-banner {
+  background: var(--card-bg);
+  border-color: var(--warm-gray);
+}
+
+body:not([data-theme="light"]) .tab-cleanup-icon {
+  background: rgba(48, 54, 61, 0.7);
+  color: #3fb950;
+}
+
+body:not([data-theme="light"]) .tab-cleanup-icon svg {
+  color: #3fb950;
+}
+
+body:not([data-theme="light"]) .toast {
+  background: var(--card-bg);
+  color: var(--ink);
+  border: 1px solid var(--warm-gray);
+}
+
+body:not([data-theme="light"]) .toast svg {
+  color: #3fb950;
 }
