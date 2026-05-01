@@ -82,15 +82,18 @@ async function fetchOpenTabs() {
     const newtabUrl = `chrome-extension://${extensionId}/index.html`;
 
     const tabs = await chrome.tabs.query({});
-    openTabs = tabs.map(t => ({
-      id:       t.id,
-      url:      t.url,
-      title:    t.title,
-      windowId: t.windowId,
-      active:   t.active,
-      // Flag Tab Out's own pages so we can detect duplicate new tabs
-      isTabOut: t.url === newtabUrl || t.url === 'chrome://newtab/',
-    }));
+    openTabs = tabs.map(t => {
+      const url = t.pendingUrl || t.url || '';
+      return {
+        id:       t.id,
+        url,
+        title:    t.title,
+        windowId: t.windowId,
+        active:   t.active,
+        // Flag Tab Out's own pages so we can detect duplicate new tabs
+        isTabOut: url === newtabUrl || url === 'chrome://newtab/',
+      };
+    });
   } catch {
     // chrome.tabs API unavailable (shouldn't happen in an extension page)
     openTabs = [];
@@ -256,7 +259,7 @@ async function closeTabOutDupes() {
        title: "Example Page",
        savedAt: "2026-04-04T10:00:00.000Z",  // ISO date string
        completed: false,             // true = checked off (archived)
-       dismissed: false              // true = dismissed without reading
+       dismissed: false              // true = restored/removed from this list
      },
      ...
    ]
@@ -285,7 +288,7 @@ async function saveTabForLater(tab) {
  * getSavedTabs()
  *
  * Returns all saved tabs from chrome.storage.local.
- * Filters out dismissed items (those are gone for good).
+ * Filters out dismissed items (those have been restored or removed).
  * Splits into active (not completed) and archived (completed).
  */
 async function getSavedTabs() {
@@ -315,14 +318,35 @@ async function checkOffSavedTab(id) {
 /**
  * dismissSavedTab(id)
  *
- * Marks a saved tab as dismissed (removed from all lists).
+ * Restores a saved tab in the background, then removes it from all saved lists.
  */
 async function dismissSavedTab(id) {
   const { deferred = [] } = await chrome.storage.local.get('deferred');
   const tab = deferred.find(t => t.id === id);
-  if (tab) {
-    tab.dismissed = true;
-    await chrome.storage.local.set({ deferred });
+  if (!tab) return null;
+
+  const restoredTab = await chrome.tabs.create({ url: tab.url, active: false });
+  await waitForRestoredTabUrl(restoredTab.id, tab.url);
+
+  tab.dismissed = true;
+  tab.restoredAt = new Date().toISOString();
+  await chrome.storage.local.set({ deferred });
+  return tab;
+}
+
+async function waitForRestoredTabUrl(tabId, expectedUrl) {
+  if (!tabId) return;
+
+  for (let attempt = 0; attempt < 10; attempt++) {
+    try {
+      const tab = await chrome.tabs.get(tabId);
+      const url = tab.pendingUrl || tab.url || '';
+      if (url === expectedUrl) return;
+    } catch {
+      return;
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 100));
   }
 }
 
@@ -737,6 +761,7 @@ function getRealTabs() {
   return openTabs.filter(t => {
     const url = t.url || '';
     return (
+      url &&
       !url.startsWith('chrome://') &&
       !url.startsWith('chrome-extension://') &&
       !url.startsWith('about:') &&
@@ -976,7 +1001,7 @@ function renderDeferredItem(item) {
           <span>${ago}</span>
         </div>
       </div>
-      <button class="deferred-dismiss" data-action="dismiss-deferred" data-deferred-id="${item.id}" title="Dismiss">
+      <button class="deferred-dismiss" data-action="dismiss-deferred" data-deferred-id="${item.id}" title="Restore tab">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
       </button>
     </div>`;
@@ -1230,11 +1255,12 @@ document.addEventListener('click', async (e) => {
 
     // Close the tab in Chrome directly
     const allTabs = await chrome.tabs.query({});
-    const match   = allTabs.find(t => t.url === tabUrl);
+    const match   = allTabs.find(t => (t.pendingUrl || t.url) === tabUrl);
     if (match) await chrome.tabs.remove(match.id);
     await fetchOpenTabs();
 
-    // Animate the chip row out
+    // Animate the chip row out, then rebuild the full dashboard from the
+    // actual tab list so group counts and card contents stay consistent.
     const chip = actionEl.closest('.page-chip');
     if (chip) {
       const rect = chip.getBoundingClientRect();
@@ -1242,22 +1268,10 @@ document.addEventListener('click', async (e) => {
       chip.style.transition = 'opacity 0.2s, transform 0.2s';
       chip.style.opacity    = '0';
       chip.style.transform  = 'scale(0.8)';
-      setTimeout(() => {
-        chip.remove();
-        // If the card now has no tabs, remove it too
-        const parentCard = document.querySelector('.mission-card:has(.mission-pages:empty)');
-        if (parentCard) animateCardOut(parentCard);
-        document.querySelectorAll('.mission-card').forEach(c => {
-          if (c.querySelectorAll('.page-chip[data-action="focus-tab"]').length === 0) {
-            animateCardOut(c);
-          }
-        });
-      }, 200);
+      setTimeout(() => { renderDashboard(); }, 200);
+    } else {
+      await renderDashboard();
     }
-
-    // Update footer
-    const statTabs = document.getElementById('statTabs');
-    if (statTabs) statTabs.textContent = openTabs.length;
 
     showToast('Tab closed');
     return;
@@ -1281,21 +1295,23 @@ document.addEventListener('click', async (e) => {
 
     // Close the tab in Chrome
     const allTabs = await chrome.tabs.query({});
-    const match   = allTabs.find(t => t.url === tabUrl);
+    const match   = allTabs.find(t => (t.pendingUrl || t.url) === tabUrl);
     if (match) await chrome.tabs.remove(match.id);
     await fetchOpenTabs();
 
-    // Animate chip out
+    // Animate chip out, then rebuild from the actual Chrome tab list so
+    // counts, action buttons, and card layout stay in sync.
     const chip = actionEl.closest('.page-chip');
     if (chip) {
       chip.style.transition = 'opacity 0.2s, transform 0.2s';
       chip.style.opacity    = '0';
       chip.style.transform  = 'scale(0.8)';
-      setTimeout(() => chip.remove(), 200);
+      setTimeout(() => { renderDashboard(); }, 200);
+    } else {
+      await renderDashboard();
     }
 
     showToast('Saved for later');
-    await renderDeferredColumn();
     return;
   }
 
@@ -1321,21 +1337,24 @@ document.addEventListener('click', async (e) => {
     return;
   }
 
-  // ---- Dismiss a saved tab (removes it entirely) ----
+  // ---- Dismiss a saved tab (restores it, then removes it from the list) ----
   if (action === 'dismiss-deferred') {
     const id = actionEl.dataset.deferredId;
     if (!id) return;
 
-    await dismissSavedTab(id);
+    const restored = await dismissSavedTab(id);
+    if (!restored) return;
 
     const item = actionEl.closest('.deferred-item');
     if (item) {
       item.classList.add('removing');
       setTimeout(() => {
-        item.remove();
-        renderDeferredColumn();
+        renderDashboard();
       }, 300);
+    } else {
+      await renderDashboard();
     }
+    showToast('Tab restored');
     return;
   }
 

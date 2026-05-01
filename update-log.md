@@ -58,3 +58,49 @@
 - Changed files:
   - ` M extension/index.html`
 
+## 2026-05-01 17:53:31 +0800
+- Project root: `D:\Projects\tab-out`
+- Total size bytes: 97911
+- Total size: 95.62 KB
+- File count: 12
+- Delta: -302 bytes (-302.00 B)
+- Label: Apply refresh animation to all tab cards
+- Changed files:
+  - ` M extension/style.css`
+
+## 2026-05-01 18:01:35 +0800
+- Project root: `D:\Projects\tab-out`
+- Total size bytes: 98323
+- Total size: 96.02 KB
+- File count: 12
+- Delta: +412 bytes (+412.00 B)
+- Label: Restore saved tabs with full dashboard rerender
+- Changed files:
+  - ` M extension/app.js`
+  - ` M extension/style.css`
+  - ` M update-log.md`
+
+## 2026-05-01 18:08:56 +0800
+- Project root: `D:\Projects\tab-out`
+- Total size bytes: 98862
+- Total size: 96.54 KB
+- File count: 12
+- Delta: +539 bytes (+539.00 B)
+- Label: Use pending tab URLs when restoring saved tabs
+- Changed files:
+  - ` M extension/app.js`
+  - ` M extension/style.css`
+  - ` M update-log.md`
+
+## 2026-05-01 18:23:46 +0800
+- Project root: `D:\Projects\tab-out`
+- Total size bytes: 98501
+- Total size: 96.19 KB
+- File count: 12
+- Delta: -361 bytes (-361.00 B)
+- Label: Rerender dashboard after closing individual tab chips
+- Changed files:
+  - ` M extension/app.js`
+  - ` M extension/style.css`
+  - ` M update-log.md`
+
