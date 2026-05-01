@@ -3,13 +3,28 @@
   "name": "Tab Out",
   "version": "1.0.0",
   "description": "Keep tabs on your tabs. Click the toolbar icon to organize all your open tabs by domain.",
-  "permissions": ["tabs", "activeTab", "storage"],
-  "background": { "service_worker": "background.js" },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_title": "Tab Out",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png"
+    }
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Open Tab Out"
     }
   },
   "icons": {

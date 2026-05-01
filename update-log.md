@@ -35,3 +35,16 @@
 - Changed files:
   - ` M extension/app.js`
 
+## 2026-05-01 13:27:13 +0800
+- Project root: `D:\Projects\tab-out`
+- Total size bytes: 98327
+- Total size: 96.02 KB
+- File count: 12
+- Delta: -1687 bytes (-1.65 KB)
+- Label: Add Chrome shortcut support and remove close sounds
+- Changed files:
+  - ` M AGENTS.md`
+  - ` M README.md`
+  - ` M extension/app.js`
+  - ` M extension/manifest.json`
+

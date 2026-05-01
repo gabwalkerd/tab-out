@@ -332,55 +332,6 @@ async function dismissSavedTab(id) {
    ---------------------------------------------------------------- */
 
 /**
- * playCloseSound()
- *
- * Plays a clean "swoosh" sound when tabs are closed.
- * Built entirely with the Web Audio API — no sound files needed.
- * A filtered noise sweep that descends in pitch, like air moving.
- */
-function playCloseSound() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const t = ctx.currentTime;
-
-    // Swoosh: shaped white noise through a sweeping bandpass filter
-    const duration = 0.25;
-    const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-
-    // Generate noise with a natural envelope (quick attack, smooth decay)
-    for (let i = 0; i < data.length; i++) {
-      const pos = i / data.length;
-      // Envelope: ramps up fast in first 10%, then fades out smoothly
-      const env = pos < 0.1 ? pos / 0.1 : Math.pow(1 - (pos - 0.1) / 0.9, 1.5);
-      data[i] = (Math.random() * 2 - 1) * env;
-    }
-
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-
-    // Bandpass filter sweeps from high to low — creates the "swoosh" character
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.Q.value = 2.0;
-    filter.frequency.setValueAtTime(4000, t);
-    filter.frequency.exponentialRampToValueAtTime(400, t + duration);
-
-    // Volume
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.15, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
-
-    source.connect(filter).connect(gain).connect(ctx.destination);
-    source.start(t);
-
-    setTimeout(() => ctx.close(), 500);
-  } catch {
-    // Audio not supported — fail silently
-  }
-}
-
-/**
  * shootConfetti(x, y)
  *
  * Shoots a burst of colorful confetti particles from the given screen
@@ -1238,7 +1189,6 @@ document.addEventListener('click', async (e) => {
   // ---- Close duplicate Tab Out tabs ----
   if (action === 'close-tabout-dupes') {
     await closeTabOutDupes();
-    playCloseSound();
 
     const statTabs = document.getElementById('statTabs');
     if (statTabs) statTabs.textContent = openTabs.length;
@@ -1283,8 +1233,6 @@ document.addEventListener('click', async (e) => {
     const match   = allTabs.find(t => t.url === tabUrl);
     if (match) await chrome.tabs.remove(match.id);
     await fetchOpenTabs();
-
-    playCloseSound();
 
     // Animate the chip row out
     const chip = actionEl.closest('.page-chip');
@@ -1411,7 +1359,6 @@ document.addEventListener('click', async (e) => {
     }
 
     if (card) {
-      playCloseSound();
       animateCardOut(card);
     }
 
@@ -1434,7 +1381,6 @@ document.addEventListener('click', async (e) => {
     if (urls.length === 0) return;
 
     await closeDuplicateTabs(urls, true);
-    playCloseSound();
 
     // Hide the dedup button
     actionEl.style.transition = 'opacity 0.2s';
@@ -1469,7 +1415,6 @@ document.addEventListener('click', async (e) => {
       .filter(t => t.url && !t.url.startsWith('chrome') && !t.url.startsWith('about:'))
       .map(t => t.url);
     await closeTabsByUrls(allUrls);
-    playCloseSound();
 
     document.querySelectorAll('#openTabsMissions .mission-card').forEach(c => {
       shootConfetti(
