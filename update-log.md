@@ -135,3 +135,13 @@
   - ` M extension/style.css`
   - ` M update-log.md`
 
+## 2026-05-01 18:54:31 +0800
+- Project root: `D:\Projects\tab-out`
+- Total size bytes: 99650
+- Total size: 97.31 KB
+- File count: 12
+- Delta: +322 bytes (+322.00 B)
+- Label: Render open-tabs empty state after refresh
+- Changed files:
+  - ` M extension/app.js`
+

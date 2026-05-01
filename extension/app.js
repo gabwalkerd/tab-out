@@ -497,7 +497,14 @@ function checkAndShowEmptyState() {
   const remaining = missionsEl.querySelectorAll('.mission-card:not(.closing)').length;
   if (remaining > 0) return;
 
-  missionsEl.innerHTML = `
+  missionsEl.innerHTML = renderOpenTabsEmptyState();
+
+  const countEl = document.getElementById('openTabsSectionCount');
+  if (countEl) countEl.textContent = '0 domains';
+}
+
+function renderOpenTabsEmptyState() {
+  return `
     <div class="missions-empty-state">
       <div class="empty-checkmark">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -508,9 +515,6 @@ function checkAndShowEmptyState() {
       <div class="empty-subtitle">You're free.</div>
     </div>
   `;
-
-  const countEl = document.getElementById('openTabsSectionCount');
-  if (countEl) countEl.textContent = '0 domains';
 }
 
 /**
@@ -1201,8 +1205,11 @@ async function renderStaticDashboard() {
     openTabsSection.style.display = 'block';
     if (emptyState) emptyState.style.display = 'none';
   } else if (openTabsSection) {
-    openTabsSection.style.display = 'none';
-    if (emptyState) emptyState.style.display = 'flex';
+    if (openTabsSectionTitle) openTabsSectionTitle.textContent = 'Open tabs';
+    if (openTabsSectionCount) openTabsSectionCount.textContent = '0 domains';
+    if (openTabsMissionsEl) openTabsMissionsEl.innerHTML = renderOpenTabsEmptyState();
+    openTabsSection.style.display = 'block';
+    if (emptyState) emptyState.style.display = 'none';
   }
 
   // --- Footer stats ---
