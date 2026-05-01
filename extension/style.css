@@ -1,10 +1,25 @@
 /* ============================================================
-   Tab Mission Control — Dashboard Styles
-   Extracted directly from mockup.html — do not modify unless
-   also updating the mockup. This is the approved design.
+   Tab Out — Full Page Dashboard Styles
    ============================================================ */
 
 :root {
+  --ink: #e8e5e0;
+  --paper: #1a1918;
+  --warm-gray: #3a3734;
+  --muted: #8a8580;
+  --accent-amber: #d4894e;
+  --accent-sage: #6a9a72;
+  --accent-slate: #7a8b9a;
+  --accent-rose: #c36a6a;
+  --status-active: #4d9a5a;
+  --status-cooling: #c8993e;
+  --status-abandoned: #c36a6a;
+  --card-bg: #242220;
+  --shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* Light theme override */
+body[data-theme="light"] {
   --ink: #1a1613;
   --paper: #f8f5f0;
   --warm-gray: #e8e2da;
@@ -35,7 +50,7 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 0;
 }
@@ -48,8 +63,6 @@ body::before {
   padding: 48px 32px 80px;
 }
 
-/* When the saved-for-later sidebar is open, expand the container
-   so the tab grid still has room for 2-3 columns */
 .container:has(.dashboard-columns) {
   max-width: 1300px;
 }
@@ -83,8 +96,8 @@ header {
 
 /* ---- Tab cleanup banner ---- */
 .tab-cleanup-banner {
-  background: linear-gradient(135deg, rgba(200, 113, 58, 0.04), rgba(200, 113, 58, 0.09));
-  border: 1px solid rgba(200, 113, 58, 0.18);
+  background: linear-gradient(135deg, rgba(212, 137, 78, 0.06), rgba(212, 137, 78, 0.12));
+  border: 1px solid rgba(212, 137, 78, 0.22);
   border-radius: 8px;
   padding: 16px 24px;
   display: flex;
@@ -103,7 +116,7 @@ header {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(200, 113, 58, 0.1);
+  background: rgba(212, 137, 78, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -145,45 +158,6 @@ header {
   transform: translateY(-1px);
 }
 
-/* ---- Nudge banner ---- */
-.nudge-banner {
-  background: linear-gradient(135deg, rgba(179, 90, 90, 0.04), rgba(179, 90, 90, 0.08));
-  border: 1px solid rgba(179, 90, 90, 0.15);
-  border-radius: 8px;
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 40px;
-}
-
-.nudge-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(179, 90, 90, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.nudge-icon svg {
-  width: 18px;
-  height: 18px;
-  color: var(--status-abandoned);
-}
-
-.nudge-text {
-  font-size: 13px;
-  color: var(--ink);
-  line-height: 1.5;
-}
-
-.nudge-text strong {
-  font-weight: 600;
-}
-
 /* ---- Section Headers ---- */
 .section-header {
   display: flex;
@@ -197,7 +171,6 @@ header {
   font-family: 'Newsreader', serif;
   font-weight: 400;
   font-size: 18px;
-  font-style: italic;
   color: var(--muted);
   white-space: nowrap;
 }
@@ -216,7 +189,7 @@ header {
   white-space: nowrap;
 }
 
-/* ---- Mission Cards ---- */
+/* ---- Mission Cards (masonry grid) ---- */
 .missions {
   columns: 280px;
   column-gap: 12px;
@@ -235,11 +208,11 @@ header {
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  break-inside: avoid;       /* don't split a card across columns */
-  margin-bottom: 12px;       /* vertical spacing (replaces grid gap) */
+  break-inside: avoid;
+  margin-bottom: 12px;
 }
 
-/* Colored top border instead of side bar for grid cards */
+/* Colored top border */
 .mission-card::before {
   content: '';
   position: absolute;
@@ -259,7 +232,7 @@ header {
   transform: translateY(-1px);
 }
 
-/* Closing animation — card scales down and fades out */
+/* Closing animation */
 .mission-card.closing {
   opacity: 0;
   transform: scale(0.9);
@@ -271,19 +244,9 @@ header {
   display: none !important;
 }
 
-/* Old side status bar — hidden, replaced by top border via ::before */
-.status-bar {
-  display: none;
-}
-
-.mission-content {
-  min-width: 0;
-}
-
-/* Hide the right-side meta (page count) — info is already in the badge */
-.mission-meta {
-  display: none;
-}
+.status-bar { display: none; }
+.mission-content { min-width: 0; }
+.mission-meta { display: none; }
 
 .mission-top {
   display: flex;
@@ -311,20 +274,24 @@ header {
 
 .mission-tag.active {
   color: var(--status-active);
-  background: rgba(61, 122, 74, 0.08);
+  background: rgba(77, 154, 90, 0.1);
 }
 
 .mission-tag.cooling {
   color: var(--status-cooling);
-  background: rgba(184, 137, 46, 0.08);
+  background: rgba(200, 153, 62, 0.1);
 }
 
 .mission-tag.abandoned {
   color: var(--status-abandoned);
-  background: rgba(179, 90, 90, 0.08);
+  background: rgba(195, 106, 106, 0.1);
 }
 
-/* Tab indicator badge — shows how many Chrome tabs are still open for this mission */
+.mission-tag.neutral {
+  color: var(--muted);
+  background: rgba(138, 133, 128, 0.1);
+}
+
 .open-tabs-badge {
   display: inline-flex;
   align-items: center;
@@ -332,7 +299,7 @@ header {
   font-size: 10px;
   font-weight: 500;
   color: var(--accent-amber);
-  background: rgba(200, 113, 58, 0.08);
+  background: rgba(212, 137, 78, 0.1);
   padding: 2px 8px;
   border-radius: 3px;
 }
@@ -355,7 +322,7 @@ header {
   gap: 0;
 }
 
-/* ---- Tab row — each tab is a full-width row with favicon, title, and actions ---- */
+/* ---- Tab row ---- */
 .page-chip {
   font-size: 13px;
   color: var(--ink);
@@ -363,7 +330,7 @@ header {
   padding: 8px 4px;
   border-radius: 0;
   border: none;
-  border-bottom: 1px solid rgba(154, 145, 138, 0.1);
+  border-bottom: 1px solid rgba(138, 133, 128, 0.1);
   position: relative;
   display: flex;
   align-items: center;
@@ -376,7 +343,6 @@ header {
   border-bottom: none;
 }
 
-/* Favicon */
 .chip-favicon {
   width: 16px;
   height: 16px;
@@ -384,29 +350,24 @@ header {
   border-radius: 2px;
 }
 
-/* Title text — wraps naturally, no truncation */
 .chip-text {
   flex: 1;
   min-width: 0;
-  /* Show up to 2 lines, then ellipsis */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Duplicate badge */
 .chip-dupe-badge {
   color: var(--accent-amber);
   font-weight: 600;
 }
 
-/* Duplicate border highlight */
 .chip-has-dupes {
-  border-color: rgba(200, 113, 58, 0.25);
+  border-color: rgba(212, 137, 78, 0.25);
 }
 
-/* Action buttons grouped on the right */
 .chip-actions {
   display: flex;
   align-items: center;
@@ -415,7 +376,7 @@ header {
   margin-left: auto;
 }
 
-/* ---- Chip action buttons (save + close) ---- */
+/* ---- Chip action buttons ---- */
 .chip-action {
   display: inline-flex;
   align-items: center;
@@ -438,17 +399,17 @@ header {
 
 .chip-action:hover {
   opacity: 1;
-  background: rgba(154, 145, 138, 0.1);
+  background: rgba(138, 133, 128, 0.12);
 }
 
 .chip-save:hover {
   color: var(--accent-sage);
-  background: rgba(90, 122, 98, 0.08);
+  background: rgba(106, 154, 114, 0.1);
 }
 
 .chip-close:hover {
   color: var(--status-abandoned);
-  background: rgba(179, 90, 90, 0.08);
+  background: rgba(195, 106, 106, 0.1);
 }
 
 .page-chip.clickable {
@@ -457,17 +418,14 @@ header {
 }
 
 .page-chip.clickable:hover {
-  background: rgba(200, 113, 58, 0.04);
+  background: rgba(212, 137, 78, 0.05);
 }
 
-/* "+N more" overflow chip */
 .page-chip-overflow {
   font-size: 12px;
   color: var(--muted);
   padding: 6px 4px;
 }
-
-/* mission-meta hidden — see above */
 
 .mission-time {
   font-size: 12px;
@@ -534,24 +492,24 @@ header {
 }
 
 .action-btn.close-tabs {
-  border-color: rgba(200, 113, 58, 0.3);
+  border-color: rgba(212, 137, 78, 0.35);
   color: var(--accent-amber);
-  background: rgba(200, 113, 58, 0.04);
+  background: rgba(212, 137, 78, 0.04);
 }
 
 .action-btn.close-tabs:hover {
-  background: rgba(200, 113, 58, 0.1);
+  background: rgba(212, 137, 78, 0.12);
   border-color: var(--accent-amber);
 }
 
 .action-btn.save-tabs {
-  border-color: rgba(90, 122, 98, 0.3);
+  border-color: rgba(106, 154, 114, 0.35);
   color: var(--accent-sage);
-  background: rgba(90, 122, 98, 0.04);
+  background: rgba(106, 154, 114, 0.04);
 }
 
 .action-btn.save-tabs:hover {
-  background: rgba(90, 122, 98, 0.1);
+  background: rgba(106, 154, 114, 0.12);
   border-color: var(--accent-sage);
 }
 
@@ -577,7 +535,7 @@ header {
   font-weight: 500;
   padding: 12px 24px;
   border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   z-index: 100;
   opacity: 0;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -659,16 +617,11 @@ footer {
 
 header { animation: fadeUp 0.5s ease both; }
 .tab-cleanup-banner { animation: fadeUp 0.5s ease 0.1s both; }
-.nudge-banner { animation: fadeUp 0.5s ease 0.15s both; }
 .active-section .section-header { animation: fadeUp 0.5s ease 0.2s both; }
 .active-section .missions .mission-card:nth-child(1) { animation: fadeUp 0.4s ease 0.25s both; }
 .active-section .missions .mission-card:nth-child(2) { animation: fadeUp 0.4s ease 0.3s both; }
 .active-section .missions .mission-card:nth-child(3) { animation: fadeUp 0.4s ease 0.35s both; }
 .active-section .missions .mission-card:nth-child(4) { animation: fadeUp 0.4s ease 0.4s both; }
-.abandoned-section .section-header { animation: fadeUp 0.5s ease 0.45s both; }
-.abandoned-section .missions .mission-card:nth-child(1) { animation: fadeUp 0.4s ease 0.5s both; }
-.abandoned-section .missions .mission-card:nth-child(2) { animation: fadeUp 0.4s ease 0.55s both; }
-.abandoned-section .missions .mission-card:nth-child(3) { animation: fadeUp 0.4s ease 0.6s both; }
 footer { animation: fadeUp 0.5s ease 0.65s both; }
 
 .deferred-list .deferred-item:nth-child(1) { animation-delay: 0.05s; }
@@ -678,61 +631,35 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
 .deferred-list .deferred-item:nth-child(5) { animation-delay: 0.25s; }
 .deferred-column .section-header { animation: fadeUp 0.5s ease 0.1s both; }
 
-
-/* ================================================================
-   STATIC DEFAULT VIEW — new elements added for "AI on demand"
-   ================================================================ */
-
-/* ---- Neutral status bar (domain-grouped cards, no AI color) ---- */
+/* ---- Neutral status bar ---- */
 .status-bar.neutral {
   background: var(--warm-gray);
 }
 
-/* ---- "Domain" tag on static domain cards ---- */
-.mission-tag.neutral {
-  color: var(--muted);
-  background: rgba(154, 145, 138, 0.1);
-}
-
-/* ================================================================
-   MISSIONS EMPTY STATE
-   Shown when all mission cards have been closed.
-   A calm, satisfying "you did it" moment.
-   ================================================================ */
-
+/* ---- Empty state ---- */
 .missions-empty-state {
-  /* Takes the full width — spans all columns */
   column-span: all;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 12px;
-
   padding: 56px 24px;
   text-align: center;
-
   animation: fadeUp 0.5s ease both;
 }
 
-/* CSS-drawn checkmark in a glowing circle */
 .empty-checkmark {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: rgba(90, 122, 98, 0.1);
-  border: 1.5px solid rgba(90, 122, 98, 0.3);
-
-  /* Soft sage glow */
-  box-shadow: 0 0 0 8px rgba(90, 122, 98, 0.05),
-              0 0 0 16px rgba(90, 122, 98, 0.03);
-
+  background: rgba(106, 154, 114, 0.12);
+  border: 1.5px solid rgba(106, 154, 114, 0.3);
+  box-shadow: 0 0 0 8px rgba(106, 154, 114, 0.06),
+              0 0 0 16px rgba(106, 154, 114, 0.03);
   display: flex;
   align-items: center;
   justify-content: center;
-
-  /* Pop in with a gentle scale animation */
   animation: checkPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
 }
 
@@ -752,7 +679,6 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   font-family: 'Newsreader', serif;
   font-size: 20px;
   font-weight: 400;
-  font-style: italic;
   color: var(--ink);
   letter-spacing: -0.3px;
 }
@@ -764,144 +690,53 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   letter-spacing: 0.3px;
 }
 
-
-/* ================================================================
-   UPDATE BANNER
-   Appears at the very top of the page when a new version is available.
-   Intentionally thin and unobtrusive — it's informational, not urgent.
-   The warm sage green palette feels calm and positive ("new thing!"),
-   contrasting with the amber/rose warning tones used elsewhere.
-   ================================================================ */
-
-.update-banner {
-  /* Thin bar — sits above the header, below the container's top padding */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-
-  /* Sage green tint — matches accent-sage but very light */
-  background: linear-gradient(135deg, rgba(90, 122, 98, 0.05), rgba(90, 122, 98, 0.10));
-  border: 1px solid rgba(90, 122, 98, 0.22);
-  border-radius: 8px;
-  padding: 10px 16px;
-
-  /* Push the header down slightly */
-  margin-bottom: 24px;
-
-  /* Slide in from above when it appears */
-  animation: bannerSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-@keyframes bannerSlideIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Left cluster: icon + text */
-.update-banner-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  min-width: 0; /* prevents text overflow from breaking layout */
-}
-
-.update-banner-icon {
-  width: 16px;
-  height: 16px;
-  color: var(--accent-sage);
-  flex-shrink: 0;
-  opacity: 0.85;
-}
-
-.update-banner-text {
-  font-size: 13px;
-  color: var(--ink);
-  font-weight: 400;
-  line-height: 1.4;
-  opacity: 0.85;
-}
-
-/* Right cluster: action button + dismiss X */
-.update-banner-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-/* "Update now" button — small, filled, sage green */
-.update-banner-btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  color: #fff;
-  background: var(--accent-sage);
-  border: none;
-  border-radius: 5px;
-  padding: 5px 12px;
+/* ---- Theme toggle button ---- */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--warm-gray);
+  border-radius: 6px;
   cursor: pointer;
-  letter-spacing: 0.2px;
-  transition: background 0.2s, opacity 0.2s;
-  white-space: nowrap;
-}
-
-.update-banner-btn:hover {
-  background: #4a6952; /* slightly darker sage */
-}
-
-.update-banner-btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-/* Dismiss X button — minimal, icon-only */
-.update-banner-dismiss {
+  padding: 6px;
+  color: var(--muted);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  border-radius: 4px;
-  color: var(--muted);
-  transition: background 0.15s, color 0.15s;
-  padding: 0;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
   flex-shrink: 0;
 }
 
-.update-banner-dismiss:hover {
-  background: rgba(26, 22, 19, 0.06);
+.theme-toggle:hover {
   color: var(--ink);
+  border-color: var(--ink);
+  background: rgba(138, 133, 128, 0.08);
 }
 
-.update-banner-dismiss svg {
-  width: 14px;
-  height: 14px;
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
 }
 
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+
+body[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+body[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
 /* ================================================================
    SAVED FOR LATER — Checklist Column + Archive
    ================================================================ */
 
-/* ---- Two-column layout ---- */
 .dashboard-columns {
   display: flex;
   gap: 32px;
   align-items: flex-start;
 }
 
-/* Open tabs column keeps the grid layout */
 .dashboard-columns .active-section {
   flex: 1;
   min-width: 600px;
 }
 
-/* Saved for later column — fixed width on the right, scrolls independently */
 .deferred-column {
   width: 280px;
   flex-shrink: 0;
@@ -911,7 +746,6 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   overflow-y: auto;
 }
 
-/* On narrow screens, stack vertically */
 @media (max-width: 800px) {
   .dashboard-columns {
     flex-direction: column;
@@ -928,7 +762,7 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   align-items: flex-start;
   gap: 10px;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(154, 145, 138, 0.12);
+  border-bottom: 1px solid rgba(138, 133, 128, 0.12);
   animation: fadeUp 0.3s ease both;
 }
 
@@ -936,7 +770,6 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   border-bottom: none;
 }
 
-/* Custom checkbox */
 .deferred-checkbox {
   appearance: none;
   -webkit-appearance: none;
@@ -960,7 +793,6 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   border-color: var(--accent-sage);
 }
 
-/* Checkmark inside the checkbox */
 .deferred-checkbox:checked::after {
   content: '';
   position: absolute;
@@ -973,7 +805,6 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   transform: rotate(45deg);
 }
 
-/* Item content (title, domain, time) */
 .deferred-info {
   flex: 1;
   min-width: 0;
@@ -1002,7 +833,6 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   gap: 8px;
 }
 
-/* Checked-off item — strikethrough + faded */
 .deferred-item.checked .deferred-title {
   text-decoration: line-through;
   color: var(--muted);
@@ -1012,7 +842,6 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   opacity: 0.5;
 }
 
-/* Dismiss (X) button */
 .deferred-dismiss {
   background: none;
   border: none;
@@ -1035,7 +864,6 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   color: var(--status-abandoned);
 }
 
-/* Slide-out animation for items being removed */
 .deferred-item.removing {
   opacity: 0;
   transform: translateX(20px);
@@ -1046,7 +874,6 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
 .deferred-empty {
   font-size: 13px;
   color: var(--muted);
-  font-style: italic;
   padding: 24px 0;
   text-align: center;
 }
@@ -1121,13 +948,12 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   color: var(--muted);
 }
 
-/* Archive items are simpler — just title + domain + date */
 .archive-item {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 6px 0;
-  border-bottom: 1px solid rgba(154, 145, 138, 0.08);
+  border-bottom: 1px solid rgba(138, 133, 128, 0.08);
 }
 
 .archive-item:last-child {

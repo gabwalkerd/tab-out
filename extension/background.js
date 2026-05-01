@@ -91,3 +91,19 @@ chrome.tabs.onUpdated.addListener(() => {
 
 // Run once immediately when the service worker first loads
 updateBadge();
+
+// ─── Click handler — open dashboard in a new tab ─────────────────────────────
+
+chrome.action.onClicked.addListener(async () => {
+  const extensionId = chrome.runtime.id;
+  const dashboardUrl = `chrome-extension://${extensionId}/index.html`;
+
+  // Check if the dashboard is already open — if so, focus that tab
+  const tabs = await chrome.tabs.query({ url: dashboardUrl });
+  if (tabs.length > 0) {
+    await chrome.tabs.update(tabs[0].id, { active: true });
+    await chrome.windows.update(tabs[0].windowId, { focused: true });
+  } else {
+    await chrome.tabs.create({ url: dashboardUrl });
+  }
+});

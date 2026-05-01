@@ -17,6 +17,49 @@
 
 
 /* ----------------------------------------------------------------
+   THEME — Dark / Light mode toggle
+
+   Persists to chrome.storage.local. Falls back to system preference
+   (prefers-color-scheme) on first load.
+   ---------------------------------------------------------------- */
+
+const THEME_KEY = 'theme';
+
+async function initTheme() {
+  try {
+    const { theme } = await chrome.storage.local.get(THEME_KEY);
+    if (theme && theme !== 'dark') {
+      document.body.dataset.theme = theme;
+    }
+    // Default: dark (no data-theme attribute = dark via :root variables)
+  } catch {}
+}
+
+// Apply immediately so there's no flash of wrong theme
+initTheme();
+
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('themeToggle');
+  if (!toggle) return;
+
+  toggle.addEventListener('click', async () => {
+    const isLight = document.body.dataset.theme === 'light';
+    const next = isLight ? 'dark' : 'light';
+
+    if (next === 'light') {
+      document.body.dataset.theme = 'light';
+    } else {
+      delete document.body.dataset.theme;
+    }
+
+    try {
+      await chrome.storage.local.set({ [THEME_KEY]: next });
+    } catch {}
+  });
+});
+
+
+/* ----------------------------------------------------------------
    CHROME TABS — Direct API Access
 
    Since this page IS the extension's new tab page, it has full
@@ -471,6 +514,26 @@ function checkAndShowEmptyState() {
 }
 
 /**
+ * checkTabOutDupes()
+ *
+ * Counts how many Tab Out pages are open. If more than 1,
+ * shows a banner offering to close the extras.
+ */
+function checkTabOutDupes() {
+  const tabOutTabs = openTabs.filter(t => t.isTabOut);
+  const banner  = document.getElementById('tabOutDupeBanner');
+  const countEl = document.getElementById('tabOutDupeCount');
+  if (!banner) return;
+
+  if (tabOutTabs.length > 1) {
+    if (countEl) countEl.textContent = tabOutTabs.length;
+    banner.style.display = 'flex';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+/**
  * timeAgo(dateStr)
  *
  * Converts an ISO date string into a human-friendly relative time.
@@ -732,25 +795,6 @@ function getRealTabs() {
   });
 }
 
-/**
- * checkTabOutDupes()
- *
- * Counts how many Tab Out pages are open. If more than 1,
- * shows a banner offering to close the extras.
- */
-function checkTabOutDupes() {
-  const tabOutTabs = openTabs.filter(t => t.isTabOut);
-  const banner  = document.getElementById('tabOutDupeBanner');
-  const countEl = document.getElementById('tabOutDupeCount');
-  if (!banner) return;
-
-  if (tabOutTabs.length > 1) {
-    if (countEl) countEl.textContent = tabOutTabs.length;
-    banner.style.display = 'flex';
-  } else {
-    banner.style.display = 'none';
-  }
-}
 
 
 /* ----------------------------------------------------------------
@@ -1147,14 +1191,17 @@ async function renderStaticDashboard() {
   const openTabsMissionsEl   = document.getElementById('openTabsMissions');
   const openTabsSectionCount = document.getElementById('openTabsSectionCount');
   const openTabsSectionTitle = document.getElementById('openTabsSectionTitle');
+  const emptyState           = document.getElementById('emptyState');
 
   if (domainGroups.length > 0 && openTabsSection) {
     if (openTabsSectionTitle) openTabsSectionTitle.textContent = 'Open tabs';
     openTabsSectionCount.innerHTML = `${domainGroups.length} domain${domainGroups.length !== 1 ? 's' : ''} &nbsp;&middot;&nbsp; <button class="action-btn close-tabs" data-action="close-all-open-tabs" style="font-size:11px;padding:3px 10px;">${ICONS.close} Close all ${realTabs.length} tabs</button>`;
     openTabsMissionsEl.innerHTML = domainGroups.map(g => renderDomainCard(g)).join('');
     openTabsSection.style.display = 'block';
+    if (emptyState) emptyState.style.display = 'none';
   } else if (openTabsSection) {
     openTabsSection.style.display = 'none';
+    if (emptyState) emptyState.style.display = 'flex';
   }
 
   // --- Footer stats ---
