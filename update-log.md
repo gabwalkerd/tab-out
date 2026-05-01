@@ -48,3 +48,13 @@
   - ` M extension/app.js`
   - ` M extension/manifest.json`
 
+## 2026-05-01 13:34:48 +0800
+- Project root: `D:\Projects\tab-out`
+- Total size bytes: 98213
+- Total size: 95.91 KB
+- File count: 12
+- Delta: -114 bytes (-114.00 B)
+- Label: Update footer repository link and author text
+- Changed files:
+  - ` M extension/index.html`
+
