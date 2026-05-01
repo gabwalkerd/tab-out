@@ -259,11 +259,14 @@ async function closeTabOutDupes() {
        title: "Example Page",
        savedAt: "2026-04-04T10:00:00.000Z",  // ISO date string
        completed: false,             // true = checked off (archived)
+       completedAt: "2026-04-04T10:00:00.000Z", // archive timestamp
        dismissed: false              // true = restored/removed from this list
      },
      ...
    ]
    ---------------------------------------------------------------- */
+
+const ARCHIVE_RETENTION_MS = 7 * 24 * 60 * 60 * 1000;
 
 /**
  * saveTabForLater(tab)
@@ -289,15 +292,37 @@ async function saveTabForLater(tab) {
  *
  * Returns all saved tabs from chrome.storage.local.
  * Filters out dismissed items (those have been restored or removed).
- * Splits into active (not completed) and archived (completed).
+ * Removes archived items older than one week, then splits into active
+ * (not completed) and archived (completed).
  */
 async function getSavedTabs() {
   const { deferred = [] } = await chrome.storage.local.get('deferred');
-  const visible = deferred.filter(t => !t.dismissed);
+  const retained = await pruneExpiredArchivedTabs(deferred);
+  const visible = retained.filter(t => !t.dismissed);
   return {
     active:   visible.filter(t => !t.completed),
     archived: visible.filter(t => t.completed),
   };
+}
+
+async function pruneExpiredArchivedTabs(deferred) {
+  const now = Date.now();
+  const retained = deferred.filter(tab => !isExpiredArchivedTab(tab, now));
+
+  if (retained.length !== deferred.length) {
+    await chrome.storage.local.set({ deferred: retained });
+  }
+
+  return retained;
+}
+
+function isExpiredArchivedTab(tab, now) {
+  if (!tab.completed) return false;
+
+  const archivedAt = Date.parse(tab.completedAt || tab.savedAt || '');
+  if (!Number.isFinite(archivedAt)) return false;
+
+  return now - archivedAt > ARCHIVE_RETENTION_MS;
 }
 
 /**

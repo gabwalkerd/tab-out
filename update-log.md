@@ -104,3 +104,13 @@
   - ` M extension/style.css`
   - ` M update-log.md`
 
+## 2026-05-01 18:33:05 +0800
+- Project root: `D:\Projects\tab-out`
+- Total size bytes: 99279
+- Total size: 96.95 KB
+- File count: 12
+- Delta: +778 bytes (+778.00 B)
+- Label: Limit archive retention to one week
+- Changed files:
+  - ` M extension/app.js`
+
