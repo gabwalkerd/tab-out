@@ -25,3 +25,13 @@
   - ` M extension/style.css`
   - `?? update-log.md`
 
+## 2026-05-01 13:15:06 +0800
+- Project root: `D:\Projects\tab-out`
+- Total size bytes: 100014
+- Total size: 97.67 KB
+- File count: 12
+- Delta: +118 bytes (+118.00 B)
+- Label: Update footer count after closing extra Tab Out tabs
+- Changed files:
+  - ` M extension/app.js`
+

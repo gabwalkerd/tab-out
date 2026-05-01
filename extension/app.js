@@ -1239,6 +1239,10 @@ document.addEventListener('click', async (e) => {
   if (action === 'close-tabout-dupes') {
     await closeTabOutDupes();
     playCloseSound();
+
+    const statTabs = document.getElementById('statTabs');
+    if (statTabs) statTabs.textContent = openTabs.length;
+
     const banner = document.getElementById('tabOutDupeBanner');
     if (banner) {
       banner.style.transition = 'opacity 0.4s';
