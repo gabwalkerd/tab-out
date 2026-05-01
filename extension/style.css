@@ -643,7 +643,7 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   gap: 12px;
   padding: 56px 24px;
   text-align: center;
-  animation: fadeUp 0.5s ease both;
+  animation: fadeUp 0.4s ease 0.25s both;
 }
 
 .empty-checkmark {
@@ -665,6 +665,17 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
   height: 26px;
   color: var(--accent-sage);
   stroke-width: 2.5;
+}
+
+body[data-theme="light"] .empty-checkmark {
+  background: rgba(200, 113, 58, 0.12);
+  border-color: rgba(200, 113, 58, 0.3);
+  box-shadow: 0 0 0 8px rgba(200, 113, 58, 0.06),
+              0 0 0 16px rgba(200, 113, 58, 0.03);
+}
+
+body[data-theme="light"] .empty-checkmark svg {
+  color: var(--accent-amber);
 }
 
 @keyframes checkPop {
